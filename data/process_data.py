@@ -20,6 +20,11 @@ def load_data(messages_filepath, categories_filepath):
     categories = pd.read_csv(categories_filepath)
     df = messages.merge(categories, on='id')
     
+    return df
+
+
+def clean_data(df):
+    
     #split the categories column into seperate columns
     categories = df['categories'].str.split(";", expand=True)
     
@@ -42,14 +47,16 @@ def load_data(messages_filepath, categories_filepath):
     #concatenate the original dataframe with the new categories dataframe
     df_concat = pd.concat([df, categories], sort=False, axis=1)
     
-    return df_concat
-
-
-def clean_data(df):
-    pass
+    #remove duplicate rows
+    df_dropped_duplicates = df_concat.drop_duplicates()
+    
+    return df_dropped_duplicates
 
 
 def save_data(df, database_filename):
+    
+    engine = create_engine(f'sqlite:///{database_filename}')
+    df.to_sql('cleaned_ETL_data', engine, index=False)
     pass  
 
 
