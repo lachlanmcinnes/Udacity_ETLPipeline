@@ -81,7 +81,16 @@ def build_model():
         ('moc', MultiOutputClassifier(KNeighborsClassifier()))
     ])
     
-    return pipeline
+    parameters = {
+        'vect__ngram_range': ((1, 1), (1, 2)),
+        'vect__max_df': (0.5, 0.75, 1.0),
+        'vect__max_features': (None, 5000, 10000),
+        'tfidf__use_idf': (True, False)
+    }
+    
+    cv = GridSearchCV(pipeline, param_grid=parameters, verbose=10, n_jobs=-1)
+    
+    return cv
 
 
 def evaluate_model(model, X_test, Y_test, category_names):

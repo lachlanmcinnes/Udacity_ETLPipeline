@@ -57,6 +57,9 @@ def clean_data(df):
     #concatenate the original dataframe with the new categories dataframe
     df_concat = pd.concat([df, categories], sort=False, axis=1)
     
+    #remove "2" values from related column
+    df_concat = df_concat[df_concat['related']!=2]
+    
     #remove duplicate rows
     df_dropped_duplicates = df_concat.drop_duplicates()
     
@@ -78,7 +81,7 @@ def save_data(df, database_filename):
     #Create Engine for sql database
     engine = create_engine(f'sqlite:///{database_filename}')
     #Dump contents of DataFrame to sql database
-    df.to_sql('cleaned_ETL_data', engine, index=False)
+    df.to_sql('cleaned_ETL_data', engine, index=False, if_exists='replace')
 
 
 def main():
