@@ -1,4 +1,23 @@
 import sys
+import pandas as pd
+import numpy as np
+from sqlalchemy import create_engine
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import classification_report, f1_score, precision_score, recall_score
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.multioutput import MultiOutputClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+import pickle
+import nltk
+from nltk.corpus import stopwords
+from nltk.stem.wordnet import WordNetLemmatizer
+from nltk.tokenize import word_tokenize
+
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+nltk.download('averaged_perceptron_tagger')
 
 
 def load_data(database_filepath):
