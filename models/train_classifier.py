@@ -2,23 +2,111 @@ import sys
 
 
 def load_data(database_filepath):
-    pass
+    '''
+        Create a dataframe from the sql database where the cleaned data is located
+        
+        INPUT:
+            location string of SQL Database
+        
+        OUTPUT:
+            pandas dataframe
+    '''
+    
+    #Create engine to connect to SQL Database
+    engine = create_engine(f'sqlite:///{database_filepath}')
+    #Create Dataframe
+    df = pd.read_sql("SELECT * FROM cleaned_ETL_data", engine)
+    
+    X = df['message']
+    Y = df.drop(columns=['message','genre','id','original'])
+    
+    return X, Y, Y.columns
 
 
 def tokenize(text):
-    pass
+    '''
+        Build a Tokenization function which lemmatize the words, converts to lower case and strips any white space
+        
+        INPUT:
+            string text
+        
+        OUTPUT:
+            Cleaned text
+    '''
+    tokens = word_tokenize(text)
+    lemmatizer = WordNetLemmatizer()
+    
+    clean_tokens = []
+    for tok in tokens:
+        clean_tok = lemmatizer.lemmatize(tok).lower().strip()
+        clean_tokens.append(clean_tok)
+
+    return clean_tokens
 
 
 def build_model():
-    pass
+    '''
+        Create a PipeLine and GridSearchCV to train and predict incoming data
+        
+        INPUT: 
+            None
+        
+        OUTPUT:
+            Machine Learning Model
+    '''
+    
+    #Create Pipeline
+    pipeline = Pipeline([
+        ('vect', CountVectorizer(tokenizer=tokenize)),
+        ('tfidf', TfidfTransformer()),
+        ('moc', MultiOutputClassifier(KNeighborsClassifier()))
+    ])
+    
+    #Create Parameters for GridSearchCV
+    parameters = {
+        'vect__ngram_range': ((1, 1), (1, 2))
+    }
+
+    #Create GridSearchCV
+    cv = GridSearchCV(pipeline, param_grid=parameters, verbose=10, n_jobs=-1)
+    
+    return cv
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
-    pass
+    '''
+        Report the f1 score, precision and recall for each output category of the dataset
+        
+        INPUT:
+            machine learning model
+            X_test data
+            Y_test data
+            Categories to evaluate
+    '''
+    
+    #predict based on X_test data
+    y_pred = model.predict(X_test)
+    
+    #Print the evaluation outcomes
+    target_names = ['Val = 0', 'Val = 1']
+    for i,col in enumerate(category_names):
+        rep = classification_report(Y_test[col],y_pred[:,i], target_names=target_names)
+        print(f'report for {col}')
+        print(rep)
+        print('\n')
 
 
 def save_model(model, model_filepath):
-    pass
+    '''
+        Save trained model as a pickle file
+        
+        INPUT: 
+            trained machine learning model
+            
+        OUTPUT:
+            pickle file
+    '''
+    pickle.dump(model, open(model_filepath, 'wb'))
 
 
 def main():

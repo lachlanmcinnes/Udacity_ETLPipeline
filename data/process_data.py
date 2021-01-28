@@ -24,6 +24,16 @@ def load_data(messages_filepath, categories_filepath):
 
 
 def clean_data(df):
+    '''
+        Take a dataframe and spearate categories column into individual data points.  Remove duplicates and return the concatenated dataframe
+        
+        INPUT:
+            pandas dataframe
+            
+        OUTPUT:
+            cleaned pandas dataframe
+    
+    '''
     
     #split the categories column into seperate columns
     categories = df['categories'].str.split(";", expand=True)
@@ -54,10 +64,21 @@ def clean_data(df):
 
 
 def save_data(df, database_filename):
+    '''
+        Dump the contents of the pandas dataframe into a defined sql database location.  Table name will be "cleaned_ETL_data"
+        
+        INPUT:
+            pandas dataframe
+            database file name
+        
+        OUTPUT:
+            None
+    '''
     
+    #Create Engine for sql database
     engine = create_engine(f'sqlite:///{database_filename}')
+    #Dump contents of DataFrame to sql database
     df.to_sql('cleaned_ETL_data', engine, index=False)
-    pass  
 
 
 def main():
