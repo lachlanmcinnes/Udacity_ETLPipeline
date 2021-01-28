@@ -76,20 +76,12 @@ def build_model():
     
     #Create Pipeline
     pipeline = Pipeline([
-        ('vect', CountVectorizer(tokenizer=tokenize)),
+        ('vect', CountVectorizer(tokenizer=tokenize, ngram_range=(1, 1))),
         ('tfidf', TfidfTransformer()),
         ('moc', MultiOutputClassifier(KNeighborsClassifier()))
     ])
     
-    #Create Parameters for GridSearchCV
-    parameters = {
-        'vect__ngram_range': ((1, 1), (1, 2))
-    }
-
-    #Create GridSearchCV
-    cv = GridSearchCV(pipeline, param_grid=parameters, verbose=10, n_jobs=-1)
-    
-    return cv
+    return pipeline
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
