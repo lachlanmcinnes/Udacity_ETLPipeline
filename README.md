@@ -6,10 +6,21 @@ This github repository is used to identify different categories diffeerent socia
 THrough different natural disasters people who have been impacted will require different things in order to stay safe.  For example, those impacted by floods may cut off supply routes, making it hard to recieve medical suplies or food.  Through this project we are hope to analyse each incoming message and see how the different categories are triggered, thus allowing emergency responders better utilise thir own resources.
 
 ### Files:
-* python file - used to wrangle data
-* python file - used to train model and export as pickle file
-* python file - contains flask code to run website
-* csv fils - containing the messages and categories
+* app
+|-templates # templates used by flask for website
+  |-go.html
+  |-master.html
+|-run.py # used to run flask website
+* data
+|-DisasterRespose.db # sql database which holds the cleaned data
+|-disaster_categories.csv # raw data showing disaster categories
+|-disaster_messages.csv # raw messages from social media during disasters
+|-process_data.py # used to clean the csv files into a useful database
+* models
+|-classifier.pkl # saved model
+|-train_classifier.py # machine learning model used to classify incoming messages based upon the ceaned database
+* README.md
+
 
 ### Python Libraries
 * pandas
