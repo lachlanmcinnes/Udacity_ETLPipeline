@@ -7,18 +7,18 @@ THrough different natural disasters people who have been impacted will require d
 
 ### Files:
 * app
-|-templates # templates used by flask for website
-  |-go.html
-  |-master.html
-|-run.py # used to run flask website
+	* templates # templates used by flask for website
+		* go.html
+		* master.html
+	* run.py # used to run flask website
 * data
-|-DisasterRespose.db # sql database which holds the cleaned data
-|-disaster_categories.csv # raw data showing disaster categories
-|-disaster_messages.csv # raw messages from social media during disasters
-|-process_data.py # used to clean the csv files into a useful database
+	* DisasterRespose.db # sql database which holds the cleaned data
+	* disaster_categories.csv # raw data showing disaster categories
+	* disaster_messages.csv # raw messages from social media during disasters
+	* process_data.py # used to clean the csv files into a useful database
 * models
-|-classifier.pkl # saved model
-|-train_classifier.py # machine learning model used to classify incoming messages based upon the ceaned database
+	* classifier.pkl # saved model
+	* train_classifier.py # machine learning model used to classify incoming messages based upon the ceaned database
 * README.md
 
 
